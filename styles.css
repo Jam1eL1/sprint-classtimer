@@ -16,9 +16,21 @@ body.dark-mode {
   color: #fff;
 }
 
+/* Alarm active state for the entire page */
+body.alarm-active {
+  animation: flash-background 1s infinite;
+}
+
 .clock {
   font-size: 3rem;
   margin: 20px;
+}
+
+/* Make clock blink when alarm is active */
+body.alarm-active .clock {
+  animation: blink-text 0.5s infinite;
+  color: red;
+  font-weight: bold;
 }
 
 .notification {
@@ -29,6 +41,9 @@ body.dark-mode {
   display: none;
   margin: 20px;
   animation: blink 1s infinite;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
 }
 
 .theme-toggle {
@@ -48,6 +63,77 @@ body.dark-mode {
   transform: scale(1.1);
 }
 
+/* Stop Alarm Button Styling */
+.stop-alarm-button {
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none;
+  margin: 20px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: pulse 1.5s infinite;
+}
+
+.stop-alarm-button:hover {
+  background-color: #ff2222;
+  transform: scale(1.05);
+}
+
+.stop-alarm-button:active {
+  transform: scale(0.98);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
 @keyframes blink {
   50% { opacity: 0.5; }
+}
+
+@keyframes blink-text {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+@keyframes flash-background {
+  0% { background-color: #f0f0f0; }
+  50% { background-color: #ffdddd; }
+  100% { background-color: #f0f0f0; }
+}
+
+body.dark-mode.alarm-active {
+  animation: flash-background-dark 1s infinite;
+}
+
+@keyframes flash-background-dark {
+  0% { background-color: #222; }
+  50% { background-color: #500; }
+  100% { background-color: #222; }
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 600px) {
+  .clock {
+    font-size: 2rem;
+  }
+  
+  .notification {
+    font-size: 1.2rem;
+    padding: 15px;
+  }
+  
+  .stop-alarm-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
 }
