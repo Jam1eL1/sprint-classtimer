@@ -55,6 +55,7 @@ function stopAlarm() {
   }
   
   window.alarmActive = false;
+  window.manualStop = true; // Set manual stop flag when user stops alarm
   
   // Hide the stop button
   const stopButton = document.getElementById('stopAlarmButton');
@@ -75,8 +76,8 @@ function updateClock() {
   
   // Check if it's 58 minutes
   if (minutes === 58) {
-    // Start alarm if not already active
-    if (!window.alarmActive) {
+    // Start alarm if not already active and not manually stopped
+    if (!window.alarmActive && !window.manualStop) {
       startAlarm();
     }
   } else {
@@ -84,7 +85,10 @@ function updateClock() {
     if (window.alarmActive && !window.manualStop) {
       stopAlarm();
     }
-    window.manualStop = false; // Reset the manual stop flag
+    // Reset the manual stop flag when we're no longer at minute 58
+    if (minutes !== 58) {
+      window.manualStop = false;
+    }
   }
 }
 
@@ -99,7 +103,6 @@ function createStopButton() {
     
     stopButton.addEventListener('click', () => {
       stopAlarm();
-      window.manualStop = true; // Flag to prevent auto-restart
     });
     
     document.body.appendChild(stopButton);
