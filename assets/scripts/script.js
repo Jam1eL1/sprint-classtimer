@@ -9,7 +9,7 @@ function updateTitle() {
     blinkState = !blinkState; // Toggle the state
   }
   // Break time logic
-  else if (minutes >= 50 && minutes < 58) {
+  else if (minutes === 50) {
     document.title = blinkState ? "🦥 Break Time!" : now.toLocaleTimeString();
     blinkState = !blinkState;
   }
@@ -107,27 +107,18 @@ function updateClock() {
   const clock = document.getElementById('clock');
   const minutes = now.getMinutes();
   clock.textContent = now.toLocaleTimeString();
-  
-  // Check if it's 58 minutes
-  if (minutes === 50 && !window.breakAlarmActive) {
-    startBreakAlarm();
-  } else if (minutes === 58) {
+    // Check if it's 58 minutes
+  if (minutes === 58) {
     // Start alarm if not already active and not manually stopped
     if (!window.alarmActive && !window.manualStop) {
       startAlarm();
     }
-   else {
-    // Auto-stop if the minute changes, but only if the user hasn't manually stopped
-    if (window.alarmActive && !window.manualStop) {
-      stopAlarm();
-    }
-    // Reset the manual stop flag when we're no longer at minute 58
-    if (minutes !== 58) {
-      window.manualStop = false;
-    }
-  }
+  } else if (minutes !== 58 && window.alarmActive) {
+    // Stop the alarm once we're no longer at minute 58
+    stopAlarm();
   }
 }
+
 
 function createStopButton() {
   // Create stop button if it doesn't exist
@@ -181,10 +172,9 @@ if (Notification.permission !== "granted") {
 // Initialize
 window.alarmActive = false;
 window.manualStop = false;
-window.breakAlarmActive = false; 
 createStopButton();
 setupAlarmSound();
-setupBreakAlarmSound();
+
 
 // Update every second
 setInterval(() => {
