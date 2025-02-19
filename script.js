@@ -4,10 +4,18 @@ function updateTitle() {
   const now = new Date();
   const minutes = now.getMinutes();
 
+  // Alarm logic
   if (minutes === 58 && window.alarmActive) {
     document.title = blinkState ? "🚨 CAMERA TIME! 🚨" : now.toLocaleTimeString();
     blinkState = !blinkState; // Toggle the state
-  } else {
+  }
+  // Break time logic
+  else if (minutes >= 50 && minutes < 58) {
+    document.title = blinkState ? "🦥 Break Time!" : now.toLocaleTimeString();
+    blinkState = !blinkState;
+  }
+  // Default title (for any other minute)
+  else {
     document.title = now.toLocaleTimeString();
   }
 }
