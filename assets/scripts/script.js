@@ -14,7 +14,7 @@ function updateTitle() {
     document.title = blinkState ? "🦥 Break Time!" : now.toLocaleTimeString();
     blinkState = !blinkState;
     
-    startBreakAlarm();
+    // startBreakAlarm();
   }
   // Default title (for any other minute)
   else {
@@ -30,36 +30,36 @@ function setupAlarmSound() {
     window.alarmAudio.loop = true; // Make the sound repeat
   }
 }
-// add breaktime alarm
-function setupBreakAlarmSound() {
-  if (!window.breakAlarmAudio) {
-    window.breakAlarmAudio = new Audio('../assets/audio/breaktime-alert.wav');
-    // console.log('breakalarm audio set up');
-    window.breakAlarmAudio.loop = true; 
-  }
-}
+// // add breaktime alarm
+// function setupBreakAlarmSound() {
+//   if (!window.breakAlarmAudio) {
+//     window.breakAlarmAudio = new Audio('../assets/audio/breaktime-alert.wav');
+//     // console.log('breakalarm audio set up');
+//     window.breakAlarmAudio.loop = true; 
+//   }
+// }
 
-// ✅ Start the break alarm (only once per minute)
-function startBreakAlarm() {
-  if (!window.breakAlarmActive) {
-    setupBreakAlarmSound(); 
-    window.breakAlarmActive = true;
+// // ✅ Start the break alarm (only once per minute)
+// // function startBreakAlarm() {
+//   if (!window.breakAlarmActive) {
+//     setupBreakAlarmSound(); 
+//     window.breakAlarmActive = true;
     
-    window.breakAlarmAudio.play().catch(error => console.log("Break alarm error:", error));
+//     window.breakAlarmAudio.play().catch(error => console.log("Break alarm error:", error));
     
-    // Stop the break alarm after 2 seconds
-    setTimeout(() => {
-      stopBreakAlarm();
-    }, 2000); // Stops the break alarm after 2 seconds
-  }
-}
-function stopBreakAlarm() {
-  if (window.breakAlarmAudio) {
-    window.breakAlarmAudio.pause();
-    window.breakAlarmAudio.currentTime = 0; // Reset audio to the beginning
-  }
-  window.breakAlarmActive = false; // Mark the break alarm as inactive
-}
+//     // Stop the break alarm after 2 seconds
+//     setTimeout(() => {
+//       stopBreakAlarm();
+//     }, 2000); // Stops the break alarm after 2 seconds
+//   }
+// }
+// function stopBreakAlarm() {
+//   if (window.breakAlarmAudio) {
+//     window.breakAlarmAudio.pause();
+//     window.breakAlarmAudio.currentTime = 0; // Reset audio to the beginning
+//   }
+//   window.breakAlarmActive = false; // Mark the break alarm as inactive
+// }
 
 function startAlarm() {
   setupAlarmSound();
