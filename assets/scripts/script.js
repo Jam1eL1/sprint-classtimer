@@ -10,9 +10,11 @@ function updateTitle() {
     blinkState = !blinkState; // Toggle the state
   }
   // Break time logic
-  else if (minutes === 50) {
+  else if (minutes === 50 && !window.breakAlarmActive) {
     document.title = blinkState ? "🦥 Break Time!" : now.toLocaleTimeString();
     blinkState = !blinkState;
+    
+    startBreakAlarm();
   }
   // Default title (for any other minute)
   else {
@@ -30,11 +32,33 @@ function setupAlarmSound() {
 }
 // add breaktime alarm
 function setupBreakAlarmSound() {
-  const birdSound = new Audio('../assets/audio/breaktime-alert.wav');
-  if (!window.alarmAudio) {
-    window.alarmAudio = birdSound;
-    window.alarmAudio.loop = true; // Make the sound repeat
+  if (!window.breakAlarmAudio) {
+    window.breakAlarmAudio = new Audio('../assets/audio/breaktime-alert.wav');
+    // console.log('breakalarm audio set up');
+    window.breakAlarmAudio.loop = true; 
   }
+}
+
+// ✅ Start the break alarm (only once per minute)
+function startBreakAlarm() {
+  if (!window.breakAlarmActive) {
+    setupBreakAlarmSound(); 
+    window.breakAlarmActive = true;
+    
+    window.breakAlarmAudio.play().catch(error => console.log("Break alarm error:", error));
+    
+    // Stop the break alarm after 2 seconds
+    setTimeout(() => {
+      stopBreakAlarm();
+    }, 2000); // Stops the break alarm after 2 seconds
+  }
+}
+function stopBreakAlarm() {
+  if (window.breakAlarmAudio) {
+    window.breakAlarmAudio.pause();
+    window.breakAlarmAudio.currentTime = 0; // Reset audio to the beginning
+  }
+  window.breakAlarmActive = false; // Mark the break alarm as inactive
 }
 
 function startAlarm() {
@@ -88,8 +112,8 @@ function updateClock() {
   clock.textContent = now.toLocaleTimeString();
   
   // Check if it's 58 minutes
-  if (minutes === 50) {
-
+  if (minutes === 50 && !window.breakAlarmActive) {
+    startBreakAlarm();
   } else if (minutes === 58) {
     // Start alarm if not already active and not manually stopped
     if (!window.alarmActive && !window.manualStop) {
@@ -160,8 +184,10 @@ if (Notification.permission !== "granted") {
 // Initialize
 window.alarmActive = false;
 window.manualStop = false;
+window.breakAlarmActive = false; 
 createStopButton();
 setupAlarmSound();
+setupBreakAlarmSound();
 
 // Update every second
 setInterval(() => {
