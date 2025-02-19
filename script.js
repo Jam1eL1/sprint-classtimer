@@ -1,15 +1,12 @@
+let blinkState = false;
+
 function updateTitle() {
   const now = new Date();
   const minutes = now.getMinutes();
-  
-  // Make title blink when alarm is active
+
   if (minutes === 58 && window.alarmActive) {
-    // Alternate between normal time and alarm text
-    if (Date.now() % 1000 < 500) {
-      document.title = "🚨 CAMERA TIME! 🚨";
-    } else {
-      document.title = now.toLocaleTimeString();
-    }
+    document.title = blinkState ? "🚨 CAMERA TIME! 🚨" : now.toLocaleTimeString();
+    blinkState = !blinkState; // Toggle the state
   } else {
     document.title = now.toLocaleTimeString();
   }
