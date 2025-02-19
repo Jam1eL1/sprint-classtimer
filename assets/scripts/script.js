@@ -10,7 +10,7 @@ function updateTitle() {
     blinkState = !blinkState; // Toggle the state
   }
   // Break time logic
-  else if (minutes >= 50 && minutes < 58) {
+  else if (minutes === 50) {
     document.title = blinkState ? "🦥 Break Time!" : now.toLocaleTimeString();
     blinkState = !blinkState;
   }
@@ -25,6 +25,14 @@ function setupAlarmSound() {
   if (!window.alarmAudio) {
     window.alarmAudio = new Audio();
     window.alarmAudio.src = 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3';
+    window.alarmAudio.loop = true; // Make the sound repeat
+  }
+}
+// add breaktime alarm
+function setupBreakAlarmSound() {
+  const birdSound = new Audio('../assets/audio/breaktime-alert.wav');
+  if (!window.alarmAudio) {
+    window.alarmAudio = birdSound;
     window.alarmAudio.loop = true; // Make the sound repeat
   }
 }
@@ -80,12 +88,14 @@ function updateClock() {
   clock.textContent = now.toLocaleTimeString();
   
   // Check if it's 58 minutes
-  if (minutes === 58) {
+  if (minutes === 50) {
+
+  } else if (minutes === 58) {
     // Start alarm if not already active and not manually stopped
     if (!window.alarmActive && !window.manualStop) {
       startAlarm();
     }
-  } else {
+   else {
     // Auto-stop if the minute changes, but only if the user hasn't manually stopped
     if (window.alarmActive && !window.manualStop) {
       stopAlarm();
@@ -94,6 +104,7 @@ function updateClock() {
     if (minutes !== 58) {
       window.manualStop = false;
     }
+  }
   }
 }
 
@@ -113,6 +124,8 @@ function createStopButton() {
     document.body.appendChild(stopButton);
   }
 }
+
+
 
 const body = document.body;
 const themeToggle = document.getElementById('themeToggle');
